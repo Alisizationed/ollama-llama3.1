@@ -1,0 +1,19 @@
+services:
+  ollama:
+    # Use 'build' instead of 'image' to build your custom Dockerfile
+    build: .
+    container_name: ollama
+    ports:
+      - "13434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+      - ./ollama_init.sh:/usr/local/bin/ollama_init.sh
+    environment:
+      - OLLAMA_INITIAL_MODEL=llama3.1:8b
+    entrypoint: ["/usr/local/bin/ollama_init.sh"]
+    restart: unless-stopped
+    tty: true
+
+volumes:
+  ollama_models:
+    driver: local
