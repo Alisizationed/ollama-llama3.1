@@ -23,6 +23,11 @@ server:
     trust-store-password: "SSLkeystorePASS1"
     enabled: true
 
+llama:
+  base-url: http://localhost:13434
+  default-model: "llama3.1:8b"
+  default-temperature: 0.8
+
 springdoc:
   api-docs:
     enabled: true
