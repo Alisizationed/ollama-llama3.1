@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.4.5'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.google.cloud.tools.jib' version '3.4.0'
 }
 
 group = 'ctif.md'
@@ -31,6 +32,31 @@ dependencies {
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+jib {
+    from {
+        image = 'eclipse-temurin:21-jre-jammy'
+    }
+    to {
+        // The image name and tag. This will be pushed to your Docker daemon or a registry.
+        image = "danuanastasia/ai-microservice:latest"
+        auth {
+            username = 'danuanastasia'
+            password = project.findProperty("docker.password") as String ?: ""
+        }
+    }
+    container {
+        // Exposed port for your Spring Boot application (default for webflux is 8080)
+        // JVM arguments, e.g., for memory settings
+        jvmFlags = ['-Xms512m', '-Xmx1024m']
+        // Environment variables
+        environment = [
+                'SPRING_PROFILES_ACTIVE': 'prod'
+        ]
+        // User/group to run the container as (for security, non-root)
+        user = "1000:1000" // Example for non-root user
+    }
 }
 
 tasks.named('test') {

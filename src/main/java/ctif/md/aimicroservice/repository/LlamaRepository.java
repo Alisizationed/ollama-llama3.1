@@ -28,7 +28,6 @@ public class LlamaRepository {
                     .bodyValue(p)
                     .retrieve()
                     .bodyToFlux(String.class)
-                    .log()
                     .filter(Objects::nonNull));
   }
 }
